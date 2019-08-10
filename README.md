@@ -2,6 +2,6 @@ AX9K!!
 
 see:
 
-https://ax9000.atlassian.net/wiki/spaces/GS/pages/91291655/Command-Line+Options
+https://docs.google.com/document/d/1Z9gCQR6sIey9RoKA7ivO_dS9AruVRuR8qI2yagmkeHs
 
 for command line parameter information
