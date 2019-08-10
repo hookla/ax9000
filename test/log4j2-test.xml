@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" packages="com.ax9k.core.time, com.ax9k.utils.logging">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <File name="BookState" fileName="temp/BookStates.log" Append="false">
+            <EventLogLayout/>
+        </File>
+        <File name="ErrorLog" fileName="temp/Error.log" Append="false">
+            <TimestampedLayout>
+                <PatternLayout>
+                    <Pattern>[%t] %m%n</Pattern>
+                </PatternLayout>
+            </TimestampedLayout>
+        </File>
+        <File name="AlgoLog" fileName="temp/Algo.log" Append="false">
+            <TimestampedLayout>
+                <PatternLayout>
+                    <Pattern>%m%n</Pattern>
+                </PatternLayout>
+            </TimestampedLayout>
+        </File>
+        <File name="TradeLog" fileName="temp/MarketTrades.log" Append="false">
+            <EventLogLayout/>
+        </File>
+        <File name="OurTradeLog" fileName="temp/OurTrades.log" Append="false">
+            <PatternLayout>
+                <Pattern>%m%n</Pattern>
+            </PatternLayout>
+        </File>
+        <File name="BarLog" fileName="temp/Bar.log" Append="false">
+            <EventLogLayout/>
+        </File>
+        <File name="BrokerLog" fileName="temp/Broker.log" Append="false">
+            <PatternLayout>
+                <Pattern>%m%n</Pattern>
+            </PatternLayout>
+        </File>
+        <File name="PositionLog" fileName="temp/PositionManager.log" Append="false">
+            <TimestampedLayout>
+                <PatternLayout>
+                    <Pattern>%m%n</Pattern>
+                </PatternLayout>
+            </TimestampedLayout>
+        </File>
+        <File name="FeatureState" fileName="temp/Features.log" Append="false">
+            <PatternLayout>
+                <Pattern>%m%n</Pattern>
+            </PatternLayout>
+        </File>
+        <File name="PeriodicFeatureLog" fileName="temp/PeriodicFeatures.log" Append="false">
+            <PatternLayout>
+                <Pattern>%m%n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="periodicFeatureLogger" level="INFO" additivity="false">
+            <AppenderRef ref="PeriodicFeatureLog"/>
+        </Logger>
+        <Logger name="dataLogger" level="INFO" additivity="false">
+            <AppenderRef ref="BookState"/>
+        </Logger>
+        <Logger name="tradeLogger" level="INFO" additivity="false">
+            <AppenderRef ref="TradeLog"/>
+        </Logger>
+        <Logger name="ourTradeLogger" level="INFO" additivity="false">
+            <AppenderRef ref="OurTradeLog"/>
+        </Logger>
+        <Logger name="algoLogger" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="AlgoLog"/>
+        </Logger>
+        <Logger name="featureLogger" level="ERROR" additivity="false">
+            <AppenderRef ref="FeatureState"/>
+        </Logger>
+        <Logger name="barLogger" level="INFO" additivity="false">
+            <AppenderRef ref="BarLog"/>
+        </Logger>
+        <Logger name="brokerLogger" level="INFO" additivity="false">
+            <AppenderRef ref="BrokerLog"/>
+        </Logger>
+        <Logger name="positionLogger" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="PositionLog"/>
+        </Logger>
+        <Logger name="error" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="ErrorLog"/>
+        </Logger>
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

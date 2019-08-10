@@ -1,0 +1,11 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/ax9k
+hooks:
+  AfterInstall:
+    - location: install.sh
+      timeout: 600
+      runas: root
+

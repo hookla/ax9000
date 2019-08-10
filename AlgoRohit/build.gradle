@@ -1,0 +1,15 @@
+apply plugin: 'java-library'
+
+dependencies {
+    api project(':core')
+    api project(':positionmanager')
+    api project(':algo')
+    api project(':utils')
+    api project(':interactivebrokers')
+
+    implementation project(':backtesting')
+    implementation project(':cex')
+
+    api name: 'tws-api'
+}
+

@@ -1,0 +1,88 @@
+import java.util.regex.Matcher
+
+apply plugin: 'application'
+
+mainClassName = 'com.ax9k.app/com.ax9k.app.Main'
+
+dependencies {
+    implementation project(':core')
+    implementation project(':algo')
+    implementation project(':interactivebrokers')
+    implementation project(':cex')
+    implementation project(':positionmanager')
+    implementation project(':backtesting')
+    implementation project(':service')
+    implementation project(':training')
+    implementation project(':utils')
+
+    implementation name: 'tws-api'
+    implementation 'commons-cli:commons-cli:1.4'
+    implementation 'org.postgresql:postgresql:42.2.2'
+
+    runtimeOnly project(':AlgoTess')
+    runtimeOnly project(':AlgoRohit')
+    runtimeOnly project(':demo')
+}
+
+//noinspection GroovyAssignabilityCheck
+task smokeTest(type: JavaExec) {
+    dependsOn build
+    group = 'verification'
+
+    def path = asPath('.', 'src', 'main', 'resources', 'ax9k_smoke_test.csv')
+    def configFile = asPath('.', 'smoke_test.properties')
+
+    args = [
+            "--config-file=$configFile", "-Ppath=$path",
+    ]
+
+    doFirst {
+        jvmArgs = [
+                '-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector',
+                '--module-path', run.classpath.asPath,
+                '--module', mainClassName
+        ]
+    }
+
+    main = mainClassName
+}
+
+private static String asPath(String... parts) {
+    return parts.join(System.getProperty('file.separator'))
+}
+
+startScripts {
+    inputs.property("mainClassName", mainClassName)
+    doFirst {
+        classpath = files()
+        defaultJvmOpts = [
+                '-Dlog4j2.contextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector',
+                '-Xmx950m', '-Xms950m',
+                '--module-path', 'APP_HOME_LIBS',
+                '--module', mainClassName
+        ]
+    }
+    doLast {
+        def bashFile = new File(outputDir, applicationName)
+        String bashContent = bashFile.text
+        bashContent = bashContent.replaceFirst('APP_HOME_LIBS', Matcher.quoteReplacement('$APP_HOME/lib'))
+        bashContent = removeExtraneousArguments(bashContent)
+        bashFile.text = bashContent
+
+        def batFile = new File(outputDir, applicationName + ".bat")
+        String batContent = batFile.text
+        batContent = batContent.replaceFirst('APP_HOME_LIBS', Matcher.quoteReplacement('%APP_HOME%\\lib'))
+        batContent = batContent.replaceFirst('-classpath "%CLASSPATH%" com.ax9k.app/com.ax9k.app.Main', '')
+        batFile.text = batContent
+    }
+}
+
+private static def removeExtraneousArguments(String bashContent) {
+    int classpathIndex = bashContent.indexOf('-classpath "\\"$CLASSPATH\\""')
+    int appArgsIndex = bashContent.indexOf('"$APP_ARGS"')
+
+    String head = bashContent.substring(0, classpathIndex)
+    String tail = bashContent.substring(appArgsIndex)
+
+    return head + tail
+}

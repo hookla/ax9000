@@ -1,0 +1,17 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation project(':core')
+    api project(':broker')
+    api project(':provider')
+
+    implementation name: 'tws-api'
+}
+
+dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.5'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.5'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.5'
+    implementation 'com.fasterxml:jackson-xml-databind:0.6.2'
+}

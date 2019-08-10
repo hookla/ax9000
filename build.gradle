@@ -1,0 +1,62 @@
+subprojects {
+    apply plugin: 'java'
+
+
+    dependencies {
+        implementation 'com.fasterxml.jackson.core:jackson-core:2.9.5'
+        implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
+        implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.5'
+        implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.5'
+
+        implementation 'org.apache.commons:commons-lang3:3.7'
+        implementation 'org.apache.logging.log4j:log4j-api:2.11.0'
+        implementation 'org.apache.logging.log4j:log4j-core:2.11.0'
+        implementation 'com.lmax:disruptor:3.4.2'
+
+        implementation(group: 'software.amazon.awssdk', name: 's3', version: '2.0.0-preview-9') {
+            exclude(group: 'com.fasterxml.jackson.core', module: 'jackson-core')
+            exclude(group: 'com.fasterxml.jackson.core', module: 'jackson-annotations')
+            exclude(group: 'com.fasterxml.jackson.core', module: 'jackson-databind')
+        }
+        implementation 'software.amazon.awssdk:dynamodb:2.0.0-preview-9'
+        implementation 'software.amazon.awssdk:machinelearning:2.0.0-preview-9'
+
+        testImplementation 'org.mockito:mockito-junit-jupiter:2.17.0'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+
+        implementation(group: 'com.tictactec', name: 'ta-lib', version: '0.4.0')
+        implementation 'org.ta4j:ta4j-core:0.11'
+    }
+
+//noinspection GroovyAssignabilityCheck
+    test {
+        doFirst {
+            jvmArgs += "-Dlog4j.configurationFile=${rootProject.file("test/log4j2-test.xml").toString()}"
+        }
+        useJUnitPlatform()
+    }
+
+    repositories {
+        mavenCentral()
+        flatDir {
+            //noinspection GroovyAssignabilityCheck
+            dirs rootProject.files('external')
+        }
+    }
+
+    sourceCompatibility = 10
+
+    compileJava {
+        doFirst {
+            options.compilerArgs = [
+                    '--module-path', classpath.asPath
+            ]
+            classpath = files()
+        }
+    }
+}
+
+
+
+

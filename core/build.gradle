@@ -1,0 +1,37 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            //noinspection GroovyAssignabilityCheck
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "me.champeau.gradle:jmh-gradle-plugin:0.4.5"
+
+    }
+
+}
+
+apply plugin: "me.champeau.gradle.jmh"
+
+build.dependsOn jmhClasses
+
+dependencies {
+    implementation project(':utils')
+}
+
+jmh {
+    include = [
+            'BasicHistoryNoCopyOrderBookBenchmark',
+            'BasicHistorySourceCopiedOrderBookBenchmark',
+            'BasicHistoryNoSourceOrderBookBenchmark'
+    ]
+    benchmarkMode = ['thrpt']
+    warmupIterations = 5
+    iterations = 10
+    fork = 1
+    jmhVersion = '1.20'
+    timeUnit = 'ms'
+    threads = 3
+}

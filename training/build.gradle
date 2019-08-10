@@ -1,0 +1,56 @@
+import java.util.regex.Matcher
+
+apply plugin: 'application'
+
+mainClassName = 'com.ax9k.training/com.ax9k.training.Main'
+
+dependencies {
+    implementation 'commons-cli:commons-cli:1.4'
+    implementation project(':utils')
+
+}
+
+run {
+    inputs.property("mainClassName", mainClassName)
+    doFirst {
+        jvmArgs = [
+                '--module-path', classpath.asPath,
+                '--module', mainClassName
+        ]
+        classpath = files()
+    }
+}
+
+startScripts {
+    inputs.property("mainClassName", mainClassName)
+    doFirst {
+        classpath = files()
+        defaultJvmOpts = [
+                '--module-path', 'APP_HOME_LIBS',
+                '--module', mainClassName
+        ]
+    }
+    doLast {
+        def bashFile = new File(outputDir, applicationName)
+        String bashContent = bashFile.text
+        bashContent = bashContent.replaceFirst('APP_HOME_LIBS', Matcher.quoteReplacement('$APP_HOME/lib'))
+        bashContent = removeExtraneousArguments(bashContent)
+        bashFile.text = bashContent
+
+        def batFile = new File(outputDir, applicationName + ".bat")
+        String batContent = batFile.text
+        batContent = batContent.replaceFirst('APP_HOME_LIBS', Matcher.quoteReplacement('%APP_HOME%\\lib'))
+        batContent = batContent.replaceFirst('-classpath "%CLASSPATH%" com.ax9k.app/com.ax9k.app.Main', '')
+        batFile.text = batContent
+    }
+}
+
+private static def removeExtraneousArguments(String bashContent) {
+    int classpathIndex = bashContent.indexOf('-classpath "\\"$CLASSPATH\\""')
+    int appArgsIndex = bashContent.indexOf('"$APP_ARGS"')
+
+    String head = bashContent.substring(0, classpathIndex)
+    String tail = bashContent.substring(appArgsIndex)
+
+    return head + tail
+}

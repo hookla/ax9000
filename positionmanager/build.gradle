@@ -1,0 +1,13 @@
+dependencies {
+    implementation project(':core')
+    implementation project(':broker')
+    implementation project(':utils')
+}
+
+dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.5'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.5'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.5'
+    implementation 'com.fasterxml:jackson-xml-databind:0.6.2'
+}

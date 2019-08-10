@@ -1,0 +1,18 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation project(':core')
+    implementation project(':backtesting')
+    api project(':broker')
+    api project(':provider')
+}
+
+dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.5'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.5'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.5'
+    implementation 'com.fasterxml:jackson-xml-databind:0.6.2'
+    implementation 'commons-codec:commons-codec:1.11'
+    implementation 'org.java-websocket:Java-WebSocket:1.3.9'
+}
